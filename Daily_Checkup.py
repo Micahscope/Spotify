@@ -1,7 +1,6 @@
-import Google_Sheets as gs
 from Monthly_Update import monthly_update
 import Local_Data as loc
-import Venmo as vm
+from APIs import Venmo as vm, Google_Sheets as gs
 from venmo_api import PaymentStatus
 from Constants import NAMES
 

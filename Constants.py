@@ -11,8 +11,8 @@ JACK_USER_ID = 2777990702301184896
 LANDIS_USER_ID = 3077913033310208184
 
 # Local storage files.
-DEBT_FILE = "Member_List.txt"
-TRANSACTION_FILE = "Pending_Transactions.txt"
+DEBT_FILE = "Local_Files/Member_List.txt"
+TRANSACTION_FILE = "Local_Files/Pending_Transactions.txt"
 
 # Lists of recognized users:
 # their names, usernames, and IDs
