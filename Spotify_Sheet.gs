@@ -16,20 +16,24 @@ const LAST_PAYMENT_CELL = 'A7';
 //RUNS EVERY 6th of EVERY MONTH. IDRK WHAT TIME I DONT REMEMBER
 function monthlyUpdate() {
   incrementCell(LAST_PAYMENT_CELL);
+
+  //test this
+  //SS.getRange(LAST_PAYMENT_CELL).setValue(SS.getRange(LAST_PAYMENT_CELL).getValue() % 12);
+
   updateOwedMonths();
 }
 
 //LOOPS THROUGH ALL MONTHLY MEMBERS TO UPDATE MONTHLY DUES
 function updateOwedMonths() {
   var row = PEOPLE_START_ROW;
-  
+
   while (row < NUM_MEMBERS + PEOPLE_START_ROW - 2) {
     updateRow(row++, -MONTHLY_COST);
   }
-  
+
   //temporary: for testing of py script
     row = 9;
-    
+
     while (row < 13) {
       updateRow(row++, -MONTHLY_COST);
     }
@@ -47,22 +51,22 @@ function updateRow(row, payment) {
   //oP:0
   //mP: 0
   //mO: 0
-  
+
   if (payment >= owed) {
     payment -= owed;
     owed = 0;
     monthsOwed = 0;
-    
+
   } else {
     owed -= payment;
     payment = 0;
     monthsOwed = owed / MONTHLY_COST;
   }
   payment += oldPayment;
-  
+
   if (payment != 0 || owed != 0) {
-    
-    
+
+
     if (payment == owed) {
       payment = owed = 0;
       monthsPrepaid = 0;
@@ -81,12 +85,12 @@ function updateRow(row, payment) {
       monthsOwed = owed / MONTHLY_COST;
     }
   }
-  
+
   SS.getRange(row, MONEY_PAID_COLUMN).setValue(payment);
   SS.getRange(row, MONEY_OWED_COLUMN).setValue(owed);
   SS.getRange(row, MONTHS_PAID_COLUMN).setValue(monthsPrepaid);
   SS.getRange(row, MONTHS_OWED_COLUMN).setValue(monthsOwed);
-  
+
 }
 
 function incrementCell(cell) {
@@ -116,8 +120,11 @@ function reset() {
 
 function update() {
   var row = SS.getActiveCell().getRow();
-  
+
   if (row > NUM_MEMBERS + 2 || row < 4)
+    // temporary
+    if (row > 8 && row < 13)
+        updateRow(row, SS.getRange(UPDATE_MONTHS_VALUE).getValue());
     return;
   
   updateRow(row, SS.getRange(UPDATE_MONTHS_VALUE).getValue());

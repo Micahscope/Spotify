@@ -13,6 +13,9 @@ LANDIS_USER_ID = 3077913033310208184
 # Local storage files.
 DEBT_FILE = "Local_Files/Member_List.txt"
 TRANSACTION_FILE = "Local_Files/Pending_Transactions.txt"
+ERROR_LOG_FILE = "Local_Files/Error_Log.txt"
+DATA_LOG_FILE = "Local_Files/Log.txt"
+
 
 # Lists of recognized users:
 # their names, usernames, and IDs

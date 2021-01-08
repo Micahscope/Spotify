@@ -1,7 +1,8 @@
 import venmo_api as vm
 from emoji import emojize, demojize
-from Constants import USER_IDS, NAMES, USERNAMES
+from Constants import USER_IDS, NAMES, USERNAMES, ERROR_LOG_FILE
 import datetime
+import Local_Data as loc
 
 '''
 Accesses (my) client Venmo account credentials.
@@ -15,6 +16,9 @@ def initialize_venmo_api():
                                               "70081150-12F5-8K84-19G2-5EK87U192AH2")
     # Initializes my Venmo account.
     client = vm.Client(access_token)
+
+    if client is None:
+        loc.update_error_log_file("Unable to access Venmo servers.")
 
     return client
 
@@ -41,8 +45,13 @@ def request_payment(client, recipient):
     # Ensure that each recognized recipient's ID
     # matches their first name and username.
     # @todo throw exception
+
     if not test_user_ids(client):
-        print("ERROR. No requests made.")
+
+        error_message = "User data in Constants.py does not match data from Venmo server."
+        error_message += " A Venmo request is needed but has not been completed."
+
+        loc.update_error_log_file(error_message)
         return None, None
 
     # Use datetime to get the current month and year.
@@ -64,6 +73,9 @@ def request_payment(client, recipient):
                                  target_user_id=recipient.id,
                                  callback=None,
                                  privacy_setting=vm.PaymentPrivacy.PRIVATE)
+
+    # Write the request to the log file.
+    loc.update_log_file("Request sent with note: " + note)
 
     # The note and amount owed by the recipient
     # are returned, to store in a file.
@@ -149,3 +161,11 @@ def test_user_ids(client):
             return False
 
     return True
+
+
+#@todo write this function
+# if a monthly payment was not completed, we want
+# to delete the previous request, and send a new one.
+
+def cancel_payment_request():
+    pass

@@ -1,7 +1,8 @@
 import Constants as c
 from Member import Member
 from emoji import demojize
-
+from sys import stderr
+import datetime
 
 '''
 This function writes all transactions from
@@ -105,7 +106,6 @@ same information.
 
 
 def update_debt_file(new_member_list):
-
     # Read the file into a list of Members.
     old_member_list = get_members()
 
@@ -167,3 +167,53 @@ def format_data_for_gs(member_list):
         spreadsheet.append(member_data)
 
     return spreadsheet
+
+
+"""
+This function writes information to a log file.
+It writes the given message formatted with the
+date and time of the write.
+"""
+
+
+def update_log_file(message):
+    # Use datetime to get the current time and date.
+    # This is used in the note to create a unique note
+    # for each log note.
+    now = datetime.datetime.now()
+    time = now.strftime("%x %X")
+
+    # Open log file in append mode.
+    with open(c.DATA_LOG_FILE, 'a') as wf:
+        # Write the note to the log file.
+        wf.write(time + " :\n" + message + "\n")
+    return
+
+
+"""
+This function writes information to an error log file.
+It writes the given message formatted with the date
+and time of the write.
+"""
+
+
+def update_error_log_file(message):
+    # Use datetime to get the current month and year.
+    # This is used in the note to create a unique note
+    # for each error log note.
+    now = datetime.datetime.now()
+    time = now.strftime("%x %X")
+
+    # Defines the note that will be written to the log
+    # and written in console as an error.
+    error_note = time + " :\n" + message + "\n"
+
+    # Open error log file in append mode.
+    with open(c.ERROR_LOG_FILE, 'a') as wf:
+        # Write the error to the error log file.
+        wf.write(error_note)
+
+    # Write the error to the console log.
+    stderr.write(error_note)
+
+    return

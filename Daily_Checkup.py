@@ -47,7 +47,6 @@ def main():
     # and local data, call monthly update.
     # Note that this occurs only after the
     # initial Spotify payment on the 6th.
-    # @todo if anything doesnt work, its this
     for i in range(len(member_list_gs)):
         if not member_list_loc[i].equals(member_list_gs[i]):
             client = monthly_update(member_list_gs, debt_count)
@@ -68,7 +67,7 @@ def main():
     # If no transactions are awaiting payment,
     # halt the program.
     if len(pending_note_list) == 0:
-        print("Nothing to do")
+        loc.update_log_file("All transactions completed.")
         return
 
     # Initialize the client if it had
@@ -119,6 +118,9 @@ def main():
         # Loop through each completed transaction
         # and the list of recognized user's names.
         for i in range(len(completed_note_list)):
+
+            loc.update_log_file("Payment received with note: " + completed_note_list[i])
+
             for name in NAMES:
                 # If the transaction note contains the user's name,
                 if completed_note_list[i].count(name) > 0:
@@ -139,6 +141,9 @@ def main():
 
         # Push the formatted data to Google Sheets.
         gs.write_sheet(data)
+
+    else:
+        loc.update_log_file("No requests completed at this time.")
 
     return
 
