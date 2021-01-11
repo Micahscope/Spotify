@@ -12,9 +12,15 @@ LANDIS_USER_ID = 3077913033310208184
 
 # Local storage files.
 DEBT_FILE = "Local_Files/Member_List.txt"
+DEBT_HIST_FILE = "Local_Files/Member_List_Backup.txt"
 TRANSACTION_FILE = "Local_Files/Pending_Transactions.txt"
+TRANSACTION_HIST_FILE = "Local_Files/Pending_Transactions_Backup.txt"
 ERROR_LOG_FILE = "Local_Files/Error_Log.txt"
 DATA_LOG_FILE = "Local_Files/Log.txt"
+
+# THE ID and specified range to access our Google Sheet data.
+SPOTIFY_SPREADSHEET_ID = '1kcdbFgniYEnsaoiGPkRPmQIR3hitxA7YbbYIR3DJg0M'
+SPREADSHEET_RANGE = 'D4:H8'
 
 
 # Lists of recognized users:

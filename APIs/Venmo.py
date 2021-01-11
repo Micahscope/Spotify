@@ -100,7 +100,6 @@ def collect_debts(client, member_list):
     for member in member_list:
         # Request a payment if the member owes money
         # and save the payment request in a list.
-        # @todo check only for previous month?
         if member.money_owed > 0:
             note, amount = request_payment(client, member)
             payment_notes.append(note)
@@ -163,7 +162,7 @@ def test_user_ids(client):
     return True
 
 
-#@todo write this function
+# @todo write this function
 # if a monthly payment was not completed, we want
 # to delete the previous request, and send a new one.
 

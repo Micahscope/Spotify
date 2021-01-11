@@ -6,16 +6,13 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from Constants import SPOTIFY_SPREADSHEET_ID, SPREADSHEET_RANGE
 
 import Constants as c
 from Member import Member
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-
-# THE ID and specified range to access our Google Sheet data.
-SPOTIFY_SPREADSHEET_ID = '1kcdbFgniYEnsaoiGPkRPmQIR3hitxA7YbbYIR3DJg0M'
-SPREADSHEET_RANGE = 'D4:H8'
 
 '''
  Sets up credentials to open the spreadsheet
@@ -121,7 +118,3 @@ def read_members(data):
             member_list.append(Member(name, debt, user_id))
 
     return member_list, debtor_count
-
-
-if __name__ == '__main__':
-    write_sheet(8)
