@@ -1,4 +1,4 @@
-@ECHO OFF
+@echo off
 setlocal enabledelayedexpansion
 
 rem Runs the Daily_Checkup.py program. After
@@ -31,13 +31,13 @@ set default=No requests completed at this time.
 
 rem Set the cmd window title to depict its purpose.
 
-TITLE Spotify
+title Spotify
 
 rem Move working directory to Spotify files.
 rem This allows us to use our local credientials files,
 rem and to access our log file later.
 
-cd /d "C:\Users\micah\PycharmProjects\Spotify"
+pushd "C:\Users\micah\PycharmProjects\Spotify"
 
 rem Execute the program.
 rem In doing so, our log file will be
@@ -63,7 +63,8 @@ for /f "tokens=*" %%a in (Local_Files\Log.txt) do (
   if !isToday!==1 (
     echo %%a|find "%default%" >nul
     if errorlevel 1 (echo %%a
-    goto :Wait
+    start "" /wait notepad.exe Local_Files\Log.txt
+    goto :Halt
     )
   )
 
