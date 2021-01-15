@@ -113,7 +113,7 @@ def main():
     # the Google Sheets spreadsheet.
     if len(completed_amount_list) != 0:
         # Update pending transaction file.
-        loc.write_transaction_file(pending_note_list, pending_amount_list, 'w')
+        loc.write_transaction_files(pending_note_list, pending_amount_list, 'w')
 
         # Loop through each completed transaction
         # and the list of recognized user's names.

@@ -1,6 +1,6 @@
 import venmo_api as vm
 from emoji import emojize, demojize
-from Constants import USER_IDS, NAMES, USERNAMES, ERROR_LOG_FILE
+from Constants import USER_IDS, NAMES, USERNAMES
 import datetime
 import Local_Data as loc
 
@@ -47,9 +47,9 @@ def request_payment(client, recipient):
     # @todo throw exception
 
     if not test_user_ids(client):
-
         error_message = "User data in Constants.py does not match data from Venmo server."
         error_message += " A Venmo request is needed but has not been completed."
+        error_message += " Likely an user's username has changed."
 
         loc.update_error_log_file(error_message)
         return None, None
@@ -129,7 +129,6 @@ def read_previous_charges(client):
     for payment in (client.payment.get_charge_payments()):
         # Any request that corresponds to a recognized
         # member is stored.
-
         if USER_IDS.count(int(payment.target.id)) > 0:
             note_list.append(demojize(payment.note))
             amount_list.append(payment.amount)
@@ -162,9 +161,26 @@ def test_user_ids(client):
     return True
 
 
-# @todo write this function
-# if a monthly payment was not completed, we want
-# to delete the previous request, and send a new one.
+"""
+This function cancels a payment request made
+by the program. It detects the payment based
+on its note and amount, and ensures that it
+is a pending request. If the request is cancelled,
+the function returns True. Otherwise, it returns false.
+"""
 
-def cancel_payment_request():
-    pass
+
+def cancel_payment_request(client, payment_note, payment_amount):
+    # Loop through all payments that the client
+    # Venmo account has charged others for.
+    for payment in (client.payment.get_charge_payments()):
+        # Ensure the online payment object matches the
+        # parameter's note, amount, and is a pending request.
+        # If so, cancel and return true.
+        if payment.note == payment_note:
+            if payment.amount == payment_amount:
+                if payment.status == vm.PaymentStatus.PENDING:
+                    client.payment.cancel_payment(payment=payment)
+                    return True
+
+    return False
