@@ -1,6 +1,7 @@
 import venmo_api as vm
 from emoji import emojize, demojize
 from Constants import USER_IDS, NAMES, USERNAMES
+from Constants import USERNAME, PASSWORD, DEVICE_ID
 import datetime
 import Local_Data as loc
 
@@ -12,8 +13,8 @@ Accesses (my) client Venmo account credentials.
 def initialize_venmo_api():
     # Sets access token to my Venmo account.
     # @todo Add encryption for account protection.
-    access_token = vm.Client.get_access_token("Micahscope", "Microcarrot8",
-                                              "70081150-12F5-8K84-19G2-5EK87U192AH2")
+    access_token = vm.Client.get_access_token(USERNAME, PASSWORD,
+                                              DEVICE_ID)
     # Initializes my Venmo account.
     client = vm.Client(access_token)
 
@@ -170,6 +171,7 @@ the function returns True. Otherwise, it returns false.
 """
 
 
+# @todo rework this. use read_previous_charges function
 def cancel_payment_request(client, payment_note, payment_amount):
     # Loop through all payments that the client
     # Venmo account has charged others for.
@@ -184,3 +186,8 @@ def cancel_payment_request(client, payment_note, payment_amount):
                     return True
 
     return False
+
+
+# @todo write this. used for incomplete payments of previous month
+def remind_payment(client, payment_note, payment_amount):
+    pass
