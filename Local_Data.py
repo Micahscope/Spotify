@@ -13,16 +13,37 @@ write mode.
 '''
 
 
-def write_transaction_file(note_list, amount_list, mode):
+def write_transaction_file(note_list, amount_list, mode, file):
     # Open transaction file in either write
     # or append mode.
-    with open(c.TRANSACTION_FILE, mode) as wf:
+    with open(file, mode) as wf:
+
+        # If writing to the history file, add a timestamp.
+        if file == c.TRANSACTION_HIST_FILE:
+            # Use datetime to get the current time and date.
+            # This is used in the note to create a unique note
+            # for each history log note.
+            time = getTime()
+
+            # Write the note
+            wf.write(time + " :\n")
+
         # Loop through items in the transaction lists.
         for i in range(len(note_list)):
             # Write each transaction.
             # Note and amount, tab delimited.
             wf.write(demojize(note_list[i]) + "\t" + str(amount_list[i]) + "\n")
     return
+
+
+"""
+
+"""
+
+
+def write_transaction_files(note_list, amount_list, mode):
+    write_transaction_file(note_list, amount_list, mode, c.TRANSACTION_FILE)
+    write_transaction_file(note_list, amount_list, 'a', c.TRANSACTION_HIST_FILE)
 
 
 '''
@@ -81,13 +102,29 @@ def get_members():
 
 """
 This function writes a list of
-members to the debt file.
+members to the debt file. This
+can either be the current debt
+file or the backup, which stores
+the current and all previous data
+stored in this file.
 """
 
 
-def write_debt_file(new_members):
-    # Open debt file in write mode.
-    with open(c.DEBT_FILE, 'w') as wf:
+def write_debt_file(new_members, mode, file):
+
+    # Open specified debt file in specified mode.
+    with open(file, mode) as wf:
+        # If writing to the history file, add a timestamp.
+        if file == c.DEBT_HIST_FILE:
+
+            # Use datetime to get the current time and date.
+            # This is used in the note to create a unique note
+            # for each history log note.
+            time = getTime()
+
+            # Write the note
+            wf.write(time + " :\n")
+
         # Loop through all members in the list.
         for member in new_members:
             # Print each member's toString function
@@ -99,9 +136,10 @@ def write_debt_file(new_members):
 """
 The function below updates the debt file with
 a new member list to compare to the current list
-stored by the file. If the lists are not different,
-the function does not waste time overwriting the
-same information.
+stored by the file. Likewise, a history file is
+written to that stores all current and prior data.
+If the lists are not different, the function does
+not waste time overwriting the same information.
 """
 
 
@@ -114,7 +152,10 @@ def update_debt_file(new_member_list):
         # If any differences are found,
         if not new_member_list[i].equals(old_member_list[i]):
             # Write the new Member list to the file.
-            write_debt_file(new_member_list)
+            write_debt_file(new_member_list, 'w', c.DEBT_FILE)
+
+            # Append the new Member list to the history file.
+            write_debt_file(new_member_list, 'a', c.DEBT_HIST_FILE)
             return True
 
     return False
@@ -180,13 +221,12 @@ def update_log_file(message):
     # Use datetime to get the current time and date.
     # This is used in the note to create a unique note
     # for each log note.
-    now = datetime.datetime.now()
-    time = now.strftime("%x %X")
+    time = getTime()
 
     # Open log file in append mode.
     with open(c.DATA_LOG_FILE, 'a') as wf:
         # Write the note to the log file.
-        wf.write(time + " :\n" + message + "\n")
+        wf.write("\n" + time + " :\n" + message + "\n")
     return
 
 
@@ -201,12 +241,11 @@ def update_error_log_file(message):
     # Use datetime to get the current month and year.
     # This is used in the note to create a unique note
     # for each error log note.
-    now = datetime.datetime.now()
-    time = now.strftime("%x %X")
+    time = getTime()
 
     # Defines the note that will be written to the log
     # and written in console as an error.
-    error_note = time + " :\n" + message + "\n"
+    error_note = time + " :\n" + message + "\n\n"
 
     # Open error log file in append mode.
     with open(c.ERROR_LOG_FILE, 'a') as wf:
@@ -217,3 +256,26 @@ def update_error_log_file(message):
     stderr.write(error_note)
 
     return
+
+
+"""
+This function returns the formatted
+time and date necessary for any logging
+information. This data will be used in
+the log files, and anytime one of the
+data files are changed, their backup files
+containing the history will be added to, with
+this datetime stamp.
+Formatting: MM/DD/YY HH:MM:SS
+"""
+
+
+def getTime():
+    # Gets the current datetime data
+    now = datetime.datetime.now()
+
+    # Formats the data as specified
+    # by the function.
+    time = now.strftime("%x %X")
+
+    return time

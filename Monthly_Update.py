@@ -17,7 +17,7 @@ MONTHLY UPDATE:
 '''
 
 
-def monthly_update(members, debt_count):
+def monthly_update(members_list_gs, debt_count):
 
     # This should be redundant, but ensures
     # the program does not update incorrectly.
@@ -28,7 +28,8 @@ def monthly_update(members, debt_count):
     # member's debt. In this case, all members
     # have prepaid for the subscription.
     if debt_count == 0:
-        loc.write_debt_file(members)
+        # @todo ensure this works. was write_...
+        loc.update_debt_file(members_list_gs)
         return None
 
     # Otherwise, at least 1 member owes
@@ -40,14 +41,35 @@ def monthly_update(members, debt_count):
         # Initialize Venmo client.
         client = vm.initialize_venmo_api()
 
+        # Initialize list variables for the currently
+        # awaiting transactions.
+        previous_notes = []
+        previous_amounts = []
+
+        # @todo ensure this works
+        # Read all transactions that are still unpaid.
+        previous_notes, previous_amounts, loc.read_transaction_file()
+
+        # Cancel all unpaid requests.
+        # We do this so there aren't repeated
+        # requests if someone does not fulfill their
+        # payment from the previous month.
+        for i in range(len(previous_notes)):
+            # If a request is not able to be cancelled, write an error to the log file.
+            if not vm.cancel_payment_request(client, previous_notes[i], previous_amounts[i]):
+                error_message = "Old transaction with note ''" + previous_notes[i]
+                error_message += "'' was unable to be removed. A double charge has occurred."
+                loc.update_error_log_file(error_message)
+
         # Request money from debtors, and
         # store the transaction information.
-        pending_notes, pending_amounts = vm.collect_debts(client, members)
+        pending_notes, pending_amounts = vm.collect_debts(client, members_list_gs)
 
         # Append the transactions to a local file.
-        loc.write_transaction_file(pending_notes, pending_amounts, 'a')
+        loc.write_transaction_files(pending_notes, pending_amounts, 'a')
 
         # Update the debts in the local file.
-        loc.write_debt_file(members)
+        # @todo ensure this works. was write_...
+        loc.update_debt_file(members_list_gs)
 
         return client
