@@ -12,7 +12,6 @@ Accesses (my) client Venmo account credentials.
 
 def initialize_venmo_api():
     # Sets access token to my Venmo account.
-    # @todo Add encryption for account protection.
     access_token = vm.Client.get_access_token(USERNAME, PASSWORD,
                                               DEVICE_ID)
     # Initializes my Venmo account.
