@@ -189,4 +189,15 @@ def cancel_payment_request(client, payment_note, payment_amount):
 
 # @todo write this. used for incomplete payments of previous month
 def remind_payment(client, payment_note, payment_amount):
-    pass
+    # Loop through all payments that the client
+    # Venmo account has charged others for.
+    for payment in (client.payment.get_charge_payments()):
+        # Ensure the online payment object matches the
+        # parameter's note, amount, and is a pending request.
+        # If so, cancel and return true.
+        if payment.note == payment_note:
+            if payment.amount == payment_amount:
+                if payment.status == vm.PaymentStatus.PENDING:
+                    vm.venmo.PaymentApi.remind_payment(payment=payment, payment_id=payment.id)
+                    return True
+    return False

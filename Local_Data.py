@@ -226,7 +226,7 @@ def update_log_file(message):
     # Open log file in append mode.
     with open(c.DATA_LOG_FILE, 'a') as wf:
         # Write the note to the log file.
-        wf.write("\n" + time + " :\n" + message + "\n")
+        wf.write("\n" + time + " :\n" + demojize(message) + "\n")
     return
 
 

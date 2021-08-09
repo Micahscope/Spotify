@@ -1,9 +1,10 @@
-import Private_Constants as pc
+from Credentials import Private_Constants as pc
 
 # These could be read from the spreadsheet, but eh.
 NUM_MEMBERS = 6
 TOTAL_COST = 15
-MONTHLY_COST = TOTAL_COST / NUM_MEMBERS
+#MONTHLY_COST = TOTAL_COST / NUM_MEMBERS
+MONTHLY_COST = 2.67
 
 # Venmo user IDs for members of plan.
 MICAH_USER_ID = pc.MICAH_USER_ID

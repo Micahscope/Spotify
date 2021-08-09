@@ -91,6 +91,9 @@ def main():
     # completed transactions list.
     for i in range(len(venmo_note_list)):
         for j in range(len(pending_note_list)):
+            # Prevent going out of bounds. May cause issues? @todo
+            if abs(j - offset) >= len(pending_note_list):
+                break
             # Match is found.
             if venmo_note_list[i] == pending_note_list[j - offset]:
                 # The matched transaction has been completed.
@@ -174,7 +177,6 @@ def monthly_update(members_list_gs, debt_count):
     # member's debt. In this case, all members
     # have prepaid for the subscription.
     if debt_count == 0:
-        # @todo ensure this works. was write_...
         loc.update_debt_file(members_list_gs)
         return None
 
@@ -192,7 +194,6 @@ def monthly_update(members_list_gs, debt_count):
         previous_notes = []
         previous_amounts = []
 
-        # @todo ensure this works
         # Read all transactions that are still unpaid.
         previous_notes, previous_amounts, loc.read_transaction_file()
 
@@ -215,7 +216,6 @@ def monthly_update(members_list_gs, debt_count):
         loc.write_transaction_files(pending_notes, pending_amounts, 'a')
 
         # Update the debts in the local file.
-        # @todo ensure this works. was write_...
         loc.update_debt_file(members_list_gs)
 
         return client
