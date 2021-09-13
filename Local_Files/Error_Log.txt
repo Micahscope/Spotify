@@ -9,4 +9,3 @@ User data in Constants.py does not match data from Venmo server. A Venmo request
 
 09/09/21 10:00:08 :
 User data in Constants.py does not match data from Venmo server. A Venmo request is needed but has not been completed. Likely an user's username has changed.
-
