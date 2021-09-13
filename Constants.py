@@ -11,7 +11,7 @@ MICAH_USER_ID = pc.MICAH_USER_ID
 ABBEY_USER_ID = pc.ABBEY_USER_ID
 ELLIOT_USER_ID = pc.ELLIOT_USER_ID
 JACK_USER_ID = pc.JACK_USER_ID
-LANDIS_USER_ID = pc.LANDIS_USER_ID
+LOTUS_USER_ID = pc.LOTUS_USER_ID
 
 # Venmo login information.
 USERNAME = pc.USERNAME
@@ -33,6 +33,6 @@ SPREADSHEET_RANGE = 'D4:H8'
 
 # Lists of recognized users:
 # their names, usernames, and IDs
-NAMES = ['Abbey', 'Elliot', 'Jack', 'Landis']
+NAMES = ['Abbey', 'Elliot', 'Jack', 'Lotus']
 USERNAMES = pc.USERNAMES
-USER_IDS = [ABBEY_USER_ID, ELLIOT_USER_ID, JACK_USER_ID, LANDIS_USER_ID]
+USER_IDS = [ABBEY_USER_ID, ELLIOT_USER_ID, JACK_USER_ID, LOTUS_USER_ID]
